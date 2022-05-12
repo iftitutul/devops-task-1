@@ -23,8 +23,7 @@ spec:
 {{- end}}
   rules:
     {{- range $host := .Values.ingress.hosts }}
-    - host: {{ include "application.tplvalues.render" (dict "value" $host "context" $)  }}
-      http:
+    - http:
         paths:
           - path: /
             pathType: {{ $pathType }}
@@ -32,7 +31,7 @@ spec:
               service:
                 name: {{ template "application.name" $ }}
                 port:
-                  name: {{ $servicePort }}
+                  number: {{ $servicePort }}
     {{- end -}}
   {{- end -}}
 {{- end -}}

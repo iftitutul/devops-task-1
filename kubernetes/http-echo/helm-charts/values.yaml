@@ -115,22 +115,12 @@ service:
   type: NodePort
 
   annotations:
-#     config.xposer.stakater.com/Domain: stakater.com
-#     config.xposer.stakater.com/IngressNameTemplate: '{{ "{{.Service}}-{{.Namespace}}" }}'
-#     config.xposer.stakater.com/IngressURLPath: /
-#     config.xposer.stakater.com/IngressURLTemplate: '{{ "{{.Service}}.{{.Namespace}}.{{.Domain}}" }}'
-#     service.alpha.openshift.io/serving-cert-secret-name: |
-#       '{{ template "application.name" . }}-tls'
-#     xposer.stakater.com/annotations: |-
-#       kubernetes.io/ingress.class: external-ingress
-#       ingress.kubernetes.io/rewrite-target: /
-#       ingress.kubernetes.io/force-ssl-redirect: true
-  
+
   ports:
-    - port: 8080
+    - port: 5678
       name: http
       protocol: TCP
-      targetPort: 8080
+      targetPort: 5678
 
 ##########################################################
 # Ingress object for exposing services
@@ -142,7 +132,7 @@ ingress:
   ingressClassName: ''
 
   # Port of the service that serves pods
-  servicePort: http
+  servicePort: 5678
 
   #Set pathType: default is ImplementationSpecific; Options: Exact, Prefix
   pathType: Prefix
