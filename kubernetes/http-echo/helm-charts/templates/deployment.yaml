@@ -89,7 +89,6 @@ spec:
           httpGet:
             {{- toYaml .Values.deployment.readinessProbe.httpGet | nindent 12 }}
           {{- end }}
-        {{- end }}
         resources:
           limits:
             memory: {{ .Values.deployment.resources.limits.memory }}
@@ -97,7 +96,5 @@ spec:
           requests:
             memory: {{ .Values.deployment.resources.requests.memory }}
             cpu: {{ .Values.deployment.resources.requests.cpu }}
-        {{- if .Values.deployment.additionalContainers }}
-{{ toYaml .Values.deployment.additionalContainers | indent 6 }}
         {{- end }}
 {{- end }}

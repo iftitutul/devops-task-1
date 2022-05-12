@@ -22,7 +22,6 @@ spec:
   ingressClassName: {{ .Values.ingress.ingressClassName }}
 {{- end}}
   rules:
-    {{- range $host := .Values.ingress.hosts }}
     - http:
         paths:
           - path: /
@@ -32,6 +31,5 @@ spec:
                 name: {{ template "application.name" $ }}
                 port:
                   number: {{ $servicePort }}
-    {{- end -}}
   {{- end -}}
 {{- end -}}
