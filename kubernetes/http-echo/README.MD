@@ -1,3 +1,8 @@
+http-echo-chat
+---------------
+
+This helm chart deploys the `http-echo` docker image in kubernetes
+
 ### Pre-requisites
    
    - Change the value `alb.ingress.kubernetes.io/certificate-arn` from `ingress.yaml` file
