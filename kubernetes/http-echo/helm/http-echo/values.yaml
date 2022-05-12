@@ -1,0 +1,170 @@
+##########################################################
+# Name of the application.
+##########################################################
+applicationName: "http-echo-app"
+
+namespaceOverride: ""
+
+##########################################################
+# Global labels
+# These labels will be added on all resources, 
+# and you can add additional labels from below 
+# on individual resource
+##########################################################
+labels:
+  app: "http-echo-app"
+  team: DevOps
+  group: com.http-echo.platform
+
+
+##########################################################
+# Deployment
+##########################################################
+deployment:
+  
+  enabled: true
+  # By default deploymentStrategy is set to rollingUpdate with maxSurge of 25% and maxUnavailable of 25%
+  # You can change type to `Recreate` or can uncomment `rollingUpdate` specification and adjust them to your usage.
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  
+  # Reload deployment if configMap/secret updates
+  reloadOnChange: true
+
+  # Additional labels for Deployment
+  additionalLabels:
+    # key: value
+
+  # Annotations on deployments
+  annotations:
+
+  # Replicas to be created
+  replicas: 1
+
+  # Image of the app container
+  image: 
+    repository: hashicorp/http-echo
+    tag: "latest"
+    pullPolicy: Always
+
+  # Startup, Readiness and Liveness probes
+  startupProbe:
+    enabled: false
+    failureThreshold: 30
+    periodSeconds: 10
+    httpGet:
+      path: '/'
+      port: 5678
+    #exec: {}
+
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+    initialDelaySeconds: 10
+    httpGet: 
+      path: '/'
+      port: 5678
+    #exec: {}
+
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+    initialDelaySeconds: 10
+    httpGet: 
+      path: '/'
+      port: 5678
+   # exec: {}
+      
+  # Resources to be defined for pod
+  resources: 
+    limits:
+      memory: 512Mi
+      cpu: 0.5
+    requests:
+      memory: 128Mi
+      cpu: 0.1
+
+
+  # Args for primary contaner
+  args: ["-text= This is http-echo Server"]
+
+  # List of ports for the primary container
+  ports:
+  - containerPort: 5678
+    name: http
+    protocol: TCP
+
+
+##########################################################
+# Service object for servicing pods
+##########################################################
+service:
+  enabled: true
+  additionalLabels:
+    # expose: "true"
+  
+  type: NodePort
+
+  annotations:
+#     config.xposer.stakater.com/Domain: stakater.com
+#     config.xposer.stakater.com/IngressNameTemplate: '{{ "{{.Service}}-{{.Namespace}}" }}'
+#     config.xposer.stakater.com/IngressURLPath: /
+#     config.xposer.stakater.com/IngressURLTemplate: '{{ "{{.Service}}.{{.Namespace}}.{{.Domain}}" }}'
+#     service.alpha.openshift.io/serving-cert-secret-name: |
+#       '{{ template "application.name" . }}-tls'
+#     xposer.stakater.com/annotations: |-
+#       kubernetes.io/ingress.class: external-ingress
+#       ingress.kubernetes.io/rewrite-target: /
+#       ingress.kubernetes.io/force-ssl-redirect: true
+  
+  ports:
+    - port: 8080
+      name: http
+      protocol: TCP
+      targetPort: 8080
+
+##########################################################
+# Ingress object for exposing services
+##########################################################
+ingress:
+  enabled: true
+  
+  # Name of the ingress class
+  ingressClassName: ''
+
+  # Port of the service that serves pods
+  servicePort: http
+
+  #Set pathType: default is ImplementationSpecific; Options: Exact, Prefix
+  pathType: Prefix
+  
+  # List of host addresses to be exposed by this Ingress
+  hosts:
+    - http-echo.augmedix.com
+
+  # Additional labels for this Ingress
+  additionalLabels:
+
+  # Add annotations to this Ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_200"}}'
+    alb.ingress.kubernetes.io/certificate-arn: 'arn:aws:acm:us-west-1:XXXX:certificate/XXXX'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'  
+
+
+
+

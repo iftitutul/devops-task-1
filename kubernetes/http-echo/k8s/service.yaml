@@ -13,5 +13,3 @@ spec:
   - port: 5678
     protocol: TCP
     targetPort: 5678
-  
-
