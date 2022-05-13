@@ -8,5 +8,4 @@ https://github.com/stakater-charts/application
 
 - Hashicorp Http Echo:
 https://hub.docker.com/r/hashicorp/http-echo
-https://github.com/Mo3m3n/http-echo-chart 
 
