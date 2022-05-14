@@ -3,9 +3,6 @@ http-echo-chart
 
 This Kubernetes manifests file/ helm chart deploys the Hashicorp `http-echo` docker image in kubernetes
 
-### Pre-requisites
-   
-   - Change the value `alb.ingress.kubernetes.io/certificate-arn` from `ingress.yaml` file
 
 ### Run Kubernetes manifests file:
    ```
