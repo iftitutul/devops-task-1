@@ -83,7 +83,7 @@
                 "arn:aws:secretsmanager:us-east-1:000011112222:secret:${secretsmanager:ResourceTag/environment}-App1-Secret-*/*"
             ],
             "Condition": {
-                "ForAllValues:StringNotLike": {
+                "StringNotLike": {
                     "secretsmanager:ResourceTag/environment": "Production"
                 }
             }
