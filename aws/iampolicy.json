@@ -38,7 +38,7 @@
             }
         },
         {
-            "Sid": "StagingSSMFullPermission",
+            "Sid": "SSMFullPermission",
             "Effect": "Allow",
             "Action": [
                 "secretsmanager:UntagResource",
@@ -61,10 +61,13 @@
                 "secretsmanager:ListSecrets",
                 "secretsmanager:TagResource"
             ],
-            "Resource": "arn:aws:secretsmanager:us-east-1:000011112222:secret:${secretsmanager:ResourceTag/environment}-App1-Secret-*",
+            "Resource": [
+                "arn:aws:secretsmanager:us-east-1:000011112222:secret:${secretsmanager:ResourceTag/environment}-App1-Secret-*",
+                "arn:aws:secretsmanager:us-east-1:000011112222:secret:${secretsmanager:ResourceTag/environment}-App1-Secret-*/*"
+            ],
             "Condition": {
                 "StringEquals": {
-                    "secretsmanager:ResourceTag/Environment": "Staging"
+                    "secretsmanager:ResourceTag/environment": "Staging"
                 }
             }
         }
