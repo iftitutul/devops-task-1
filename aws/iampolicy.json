@@ -1,0 +1,72 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "S3BucketStatement",
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::${aws:username}",
+                "arn:aws:s3:::${aws:username}/*"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "${aws:username}/*"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "SSMReadStatement",
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:GetRandomPassword",
+                "secretsmanager:GetResourcePolicy",
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+                "secretsmanager:ListSecretVersionIds"
+            ],
+            "Resource": [
+                "arn:aws:secretsmanager:us-east-1:000011112222:secret:SuperSecretDatabases/SecretDatabase01-l9sSe3/",
+                "arn:aws:secretsmanager:us-east-1:000011112222:secret:SuperSecretDatabases/SecretDatabase01-l9sSe3/*"
+            ],
+            "Condition": {
+                "Bool": {
+                    "aws:MultiFactorAuthPresent": "true"
+                }
+            }
+        },
+        {
+            "Sid": "StagingSSMFullPermission",
+            "Effect": "Allow",
+            "Action": [
+                "secretsmanager:UntagResource",
+                "secretsmanager:DescribeSecret",
+                "secretsmanager:PutSecretValue",
+                "secretsmanager:CreateSecret",
+                "secretsmanager:DeleteSecret",
+                "secretsmanager:CancelRotateSecret",
+                "secretsmanager:ListSecretVersionIds",
+                "secretsmanager:UpdateSecret",
+                "secretsmanager:GetRandomPassword",
+                "secretsmanager:GetResourcePolicy",
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:StopReplicationToReplica",
+                "secretsmanager:ReplicateSecretToRegions",
+                "secretsmanager:RestoreSecret",
+                "secretsmanager:RotateSecret",
+                "secretsmanager:UpdateSecretVersionStage",
+                "secretsmanager:RemoveRegionsFromReplication",
+                "secretsmanager:ListSecrets",
+                "secretsmanager:TagResource"
+            ],
+            "Resource": "arn:aws:secretsmanager:us-east-1:000011112222:secret:${secretsmanager:ResourceTag/environment}-App1-Secret-*",
+            "Condition": {
+                "StringEquals": {
+                    "secretsmanager:ResourceTag/Environment": "Staging"
+                }
+            }
+        }
+    ]
+}
